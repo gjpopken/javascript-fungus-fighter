@@ -36,7 +36,7 @@ function attack(cost, damage) {
     enemyHP -= damage
     ourAP -= cost
     checkIfDead()
-    checkIfLowHealth()
+    //checkIfLowHealth() this disable its ability to heal. It's too powerful
     render()
 }
 
@@ -53,36 +53,38 @@ function checkIfDead() {
         ourAP = 0
         // get the buttons to disable them
         disableAttacks()
-    }
-
-    // A function to disable the attack buttons
-    function disableAttacks() {
-        const buttons = document.getElementsByTagName('button')
-        //console.log(buttons);
-        for (let button of buttons) {
-            button.setAttribute('disabled', 'true')
-        }
-    }
+    } 
 }
 
-function checkIfLowHealth () {
-// We want to set the critial status to true if the fungus' health is below 50, and false if it gets above
-// if it is critical, then we activate its healing ability
-let healing
-if (enemyHP <= 50) {
-    criticalStatus = true
-    console.log('health is critical');
-} else {
-    criticalStatus = false
-    console.log('health is not critical');
+// A function to disable the attack buttons
+function disableAttacks() {
+    const buttons = document.getElementsByTagName('button')
+    //console.log(buttons);
+    for (let button of buttons) {
+        button.setAttribute('disabled', 'true')
+    }
 }
-if (criticalStatus) {
-    console.log('activate healing');
-    healing = setInterval(healingPower, 1000, 1)
-} else { // breaks the interval timer
-    clearInterval(healing)
-    healing = null
-}
+
+
+// function not being called
+function checkIfLowHealth() {
+    // We want to set the critial status to true if the fungus' health is below 50, and false if it gets above
+    // if it is critical, then we activate its healing ability
+    let healing
+    if (enemyHP <= 50) {
+        criticalStatus = true
+        console.log('health is critical');
+    } else {
+        criticalStatus = false
+        console.log('health is not critical');
+    }
+    if (criticalStatus) {
+        console.log('activate healing');
+        healing = setInterval(healingPower, 1000, 1)
+    } else { // breaks the interval timer
+        clearInterval(healing)
+        healing = null
+    }
 }
 
 // Function that increases the fungus' health by a certain amount
@@ -99,7 +101,7 @@ function healingPower(amount) {
 // ! State
 let ourAP = 100
 let enemyHP = 100
-let criticalStatus = false
+let criticalStatus = false // for the healing function, which I didn't get to work
 
 // ! Render
 function render() {
