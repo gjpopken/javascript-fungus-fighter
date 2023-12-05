@@ -4,10 +4,10 @@
 // let fungusHP = 100;
 
 // Todo 
-// - STATE:create variable for fungus' health points and out attack points (can't go negative - check to make sure you have enough AP to make the attack?)
+//// - STATE:create variable for fungus' health points and out attack points (can't go negative - check to make sure you have enough AP to make the attack?)
 //// - RENDER: update how much AP and HP show on the screen
 //// - if the mushroom dies, replace it's 'walk' class with 'dead' class
-// - if you don't have AP, make the mushroom's class be 'jump', and disable attribute to the attack buttons
+//// - if you don't have AP, make the mushroom's class be 'jump', and disable attribute to the attack buttons
 // - STRETCH
 
 function onReady() {
@@ -54,13 +54,13 @@ function checkIfDead() {
     }
 
     // A function to disable the attack buttons
-function disableAttacks() {
-    const buttons = document.getElementsByTagName('button')
-    //console.log(buttons);
-    for (let button of buttons) {
-        button.setAttribute('disabled', 'true')
+    function disableAttacks() {
+        const buttons = document.getElementsByTagName('button')
+        //console.log(buttons);
+        for (let button of buttons) {
+            button.setAttribute('disabled', 'true')
+        }
     }
-}
 
 
 }
@@ -70,6 +70,28 @@ function disableAttacks() {
 // ! State
 let ourAP = 100
 let enemyHP = 100
+let attacks = [
+    {
+        attackName: 'Arcane Scepter',
+        'AP Cost': 12,
+        'HP Damage': 14
+    },
+    {
+        attackName: 'Entangle',
+        'AP Cost': 23,
+        'HP Damage': 9
+    },
+    {
+        attackName: 'Dragon Blade',
+        'AP Cost': 38,
+        'HP Damage': 47
+    },
+    {
+        attackName: 'Star Fire',
+        'AP Cost': 33,
+        'HP Damage': 25
+    },
+]
 
 // ! Render
 function render() {
