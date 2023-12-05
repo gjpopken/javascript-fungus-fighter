@@ -35,7 +35,8 @@ function attack(cost, damage) {
     //updates state 
     enemyHP -= damage
     ourAP -= cost
-    checkIfDead();
+    checkIfDead()
+    checkIfLowHealth()
     render()
 }
 
@@ -45,12 +46,13 @@ function checkIfDead() {
         document.getElementsByClassName('freaky-fungus')[0].classList.replace('walk', 'dead')
         //resets hp so that it doesn't go below 0
         enemyHP = 0
+        disableAttacks()
     }
     if (ourAP <= 0) { // In the case of a tie, it will appear as though the fungus loses
         document.getElementsByClassName('freaky-fungus')[0].classList.replace('walk', 'jump')
         ourAP = 0
         // get the buttons to disable them
-        disableAttacks();
+        disableAttacks()
     }
 
     // A function to disable the attack buttons
@@ -61,8 +63,35 @@ function checkIfDead() {
             button.setAttribute('disabled', 'true')
         }
     }
+}
 
+function checkIfLowHealth () {
+// We want to set the critial status to true if the fungus' health is below 50, and false if it gets above
+// if it is critical, then we activate its healing ability
+let healing
+if (enemyHP <= 50) {
+    criticalStatus = true
+    console.log('health is critical');
+} else {
+    criticalStatus = false
+    console.log('health is not critical');
+}
+if (criticalStatus) {
+    console.log('activate healing');
+    healing = setInterval(healingPower, 1000, 1)
+} else { // breaks the interval timer
+    clearInterval(healing)
+    healing = null
+}
+}
 
+// Function that increases the fungus' health by a certain amount
+function healingPower(amount) {
+    console.log('in healing power', amount);
+    enemyHP += amount
+    console.log(enemyHP);
+    //checkIfLowHealth() this made it heal way too much
+    render()
 }
 
 
@@ -70,28 +99,7 @@ function checkIfDead() {
 // ! State
 let ourAP = 100
 let enemyHP = 100
-let attacks = [
-    {
-        attackName: 'Arcane Scepter',
-        'AP Cost': 12,
-        'HP Damage': 14
-    },
-    {
-        attackName: 'Entangle',
-        'AP Cost': 23,
-        'HP Damage': 9
-    },
-    {
-        attackName: 'Dragon Blade',
-        'AP Cost': 38,
-        'HP Damage': 47
-    },
-    {
-        attackName: 'Star Fire',
-        'AP Cost': 33,
-        'HP Damage': 25
-    },
-]
+let criticalStatus = false
 
 // ! Render
 function render() {
@@ -107,4 +115,12 @@ function render() {
     hPTextDiv.innerHTML = `
     ${enemyHP} HP
     `
+
+    // STRETCH
+    //  update the meters' values
+    const apmeter = document.getElementById('ap-meter')
+    const hpmeter = document.getElementById('hp-meter')
+    //console.log(apmeter);
+    apmeter.value = ourAP
+    hpmeter.value = enemyHP
 }
