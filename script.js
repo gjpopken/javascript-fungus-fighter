@@ -8,7 +8,9 @@
 //// - RENDER: update how much AP and HP show on the screen
 //// - if the mushroom dies, replace it's 'walk' class with 'dead' class
 //// - if you don't have AP, make the mushroom's class be 'jump', and disable attribute to the attack buttons
-// - STRETCH
+// - STRETCH create a way to increment the health of the shroom while it's health is low. It should activate when it is below 50, and stop healing when it reaches 100 again
+// whenever its health changes, it should check to see if it's below 50 and if it is currently healing. If its below 50 and it hasn't started healing, start. if not, it shouldn't do anything
+
 
 function onReady() {
     console.log("Ready to go!")
@@ -36,7 +38,7 @@ function attack(cost, damage) {
     enemyHP -= damage
     ourAP -= cost
     checkIfDead()
-    //checkIfLowHealth() this disable its ability to heal. It's too powerful
+    checkHealthStatus()
     render()
 }
 
@@ -46,6 +48,10 @@ function checkIfDead() {
         document.getElementsByClassName('freaky-fungus')[0].classList.replace('walk', 'dead')
         //resets hp so that it doesn't go below 0
         enemyHP = 0
+        enemyIsDead
+        clearInterval(healer)
+        healer = null
+        console.log('stop healing');
         disableAttacks()
     }
     if (ourAP <= 0) { // In the case of a tie, it will appear as though the fungus loses
@@ -65,34 +71,31 @@ function disableAttacks() {
     }
 }
 
-
-// function not being called
-function checkIfLowHealth() {
-    // We want to set the critial status to true if the fungus' health is below 50, and false if it gets above
-    // if it is critical, then we activate its healing ability
-    let healing
-    if (enemyHP <= 50) {
+// a function to check if it's health is below 50 and if it's currently healing
+function checkHealthStatus() {
+    if (!enemyIsDead){if (enemyHP < 50 && !criticalStatus) {
         criticalStatus = true
-        console.log('health is critical');
-    } else {
-        criticalStatus = false
-        console.log('health is not critical');
+        console.log('start healing');
+        healer = setInterval(healingPower, 1000, 1) // i need a way to access the original interval that was set, and clear it when health is back up
+    } else if (enemyHP >= 75 && criticalStatus) {
+        !criticalStatus
+        clearInterval(healer)
+        healer = null
+        console.log('stop healing');
+    } else if (enemyHP < 50 && criticalStatus) {
+        console.log('continue healing')
     }
-    if (criticalStatus) {
-        console.log('activate healing');
-        healing = setInterval(healingPower, 1000, 1)
-    } else { // breaks the interval timer
-        clearInterval(healing)
-        healing = null
-    }
+} 
 }
+    
+
 
 // Function that increases the fungus' health by a certain amount
 function healingPower(amount) {
     console.log('in healing power', amount);
     enemyHP += amount
-    console.log(enemyHP);
-    //checkIfLowHealth() this made it heal way too much
+    console.log(enemyHP)
+    checkHealthStatus()
     render()
 }
 
@@ -101,7 +104,9 @@ function healingPower(amount) {
 // ! State
 let ourAP = 100
 let enemyHP = 100
-let criticalStatus = false // for the healing function, which I didn't get to work
+let criticalStatus = false
+let healer
+let enemyIsDead = false
 
 // ! Render
 function render() {
