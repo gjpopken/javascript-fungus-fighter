@@ -1,0 +1,5 @@
+- STATE:create variable for fungus' health points and out attack points (can't go negative - check to make sure you have enough AP to make the attack?)
+- RENDER: update how much AP and HP show on the screen
+- if the mushroom dies, replace it's 'walk' class with 'dead' class
+- if you don't have AP, make the mushroom's class be 'jump', and disable attribute to the attack buttons
+- STRETCH
