@@ -48,6 +48,10 @@ function checkIfDead() {
         document.getElementsByClassName('freaky-fungus')[0].classList.replace('walk', 'dead')
         //resets hp so that it doesn't go below 0
         enemyHP = 0
+        enemyIsDead
+        clearInterval(healer)
+        healer = null
+        console.log('stop healing');
         disableAttacks()
     }
     if (ourAP <= 0) { // In the case of a tie, it will appear as though the fungus loses
@@ -69,7 +73,7 @@ function disableAttacks() {
 
 // a function to check if it's health is below 50 and if it's currently healing
 function checkHealthStatus() {
-    if (enemyHP < 50 && !criticalStatus) {
+    if (!enemyIsDead){if (enemyHP < 50 && !criticalStatus) {
         criticalStatus = true
         console.log('start healing');
         healer = setInterval(healingPower, 1000, 1) // i need a way to access the original interval that was set, and clear it when health is back up
@@ -82,7 +86,8 @@ function checkHealthStatus() {
         console.log('continue healing')
     }
 } 
-
+}
+    
 
 
 // Function that increases the fungus' health by a certain amount
@@ -101,6 +106,7 @@ let ourAP = 100
 let enemyHP = 100
 let criticalStatus = false
 let healer
+let enemyIsDead = false
 
 // ! Render
 function render() {
